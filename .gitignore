@@ -1,0 +1,12 @@
+.DS_Store
+# build output
+mac/.build/
+mac/build/
+windows/dist/
+dist/
+# downloaded by scripts/fetch-deps.sh
+windows/deps/
+# local reference checkouts / backups
+sunshine-src/
+*.before-*
+*.orig
