@@ -613,7 +613,7 @@ final class AppState: ObservableObject {
         CGGetActiveDisplayList(16, &ids, &n)
         let virtual = Set(screens.values.map(\.displayID))
         let a = ids.prefix(Int(n))
-        let mac = a.first { CGDisplayIsBuiltin($0) != 0 } ?? a.first { !virtual.contains($0) } ?? CGMainDisplayID()
+        let mac: CGDirectDisplayID = a.first(where: { CGDisplayIsBuiltin($0) != 0 }) ?? a.first(where: { !virtual.contains($0) }) ?? CGMainDisplayID()
         return CGDisplayBounds(mac)
     }
 
