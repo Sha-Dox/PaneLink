@@ -10,7 +10,7 @@ struct PaneLinkApp: App {
         MenuBarExtra {
             MenuBarView(state: state)
         } label: {
-            MenuBarIcon(on: state.isOn)
+            MenuBarIcon(on: state.isOn).modifier(FirstRunOpener(state: state))
         }
         .menuBarExtraStyle(.window)
 
@@ -54,6 +54,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if CommandLine.arguments.contains("--hidpitest") { AlignSelfTest.hiDPITest(); return }
         if CommandLine.arguments.contains("--uishot") { AlignSelfTest.uiShot(); return }
         if CommandLine.arguments.contains("--stalltest") { AlignSelfTest.stallTest(); return }
+        if let i = CommandLine.arguments.firstIndex(of: "--pairtest"), i + 2 < CommandLine.arguments.count {
+            // --pairtest <host> <code>: the setup card's flow without the UI (dev builds only touch the dev settings)
+            let st = AppState.shared, host = CommandLine.arguments[i + 1], code = CommandLine.arguments[i + 2]
+            st.pair(with: host)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                print("after PAIR: \(st.pairing)")
+                st.submit(code: code)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    print("after code: pairing=\(st.pairing) token=\(st.settings.token.isEmpty ? "none" : "set") mac=\(st.settings.wakeMAC) name=\(st.settings.pcName) monitors=\(st.monitors.count)")
+                    exit(st.settings.token.isEmpty ? 1 : 0)
+                }
+            }
+            return
+        }
         if CommandLine.arguments.contains("--discoverytest") {
             Task {
                 let pcs = await Discovery.scan()
@@ -108,5 +122,21 @@ struct MenuBarIcon: View {
     var body: some View {
         if let img = Self.images[on] { Image(nsImage: img) }
         else { Image(systemName: on ? "display.2" : "display") }
+    }
+}
+
+/// A menu bar app shows nothing at launch: on the first run (no PC yet) open the setup window.
+/// Lives on the menu bar icon because that's the one view SwiftUI renders right away.
+struct FirstRunOpener: ViewModifier {
+    @ObservedObject var state: AppState
+    @Environment(\.openWindow) private var openWindow
+    func body(content: Content) -> some View {
+        content.onAppear {
+            guard state.isFirstRun, !CommandLine.arguments.contains(where: { $0.hasPrefix("--") && $0 != "--autostart" }) else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                openWindow(id: "main")
+                NSApp.activate(ignoringOtherApps: true)
+            }
+        }
     }
 }

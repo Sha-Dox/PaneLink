@@ -37,7 +37,7 @@ struct MainWindow: View {
                 .font(.callout)
             }
             Spacer()
-            if state.connectedHost == nil && !state.isOn {
+            if state.connectedHost == nil && !state.isOn && !state.isFirstRun {
                 if state.canWake { Button("Wake PC") { state.wake(); state.reconnect() } }
                 Button("Reconnect") { state.reconnect() }
             }

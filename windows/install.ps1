@@ -2,6 +2,7 @@
 # and with nobody logged in. Firewall: LAN + Tailscale only. Run Install.cmd (it asks for admin).
 $ErrorActionPreference = 'Stop'
 $src = Split-Path -Parent $MyInvocation.MyCommand.Path
+Get-ChildItem $src | Unblock-File   # downloaded zip: drop the 'from the internet' mark
 $dst = 'C:\Program Files\PaneLink'
 $exe = "$dst\panelink.exe"
 

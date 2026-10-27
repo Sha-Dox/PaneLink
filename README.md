@@ -40,23 +40,27 @@ Download both zips from the [latest release](../../releases/latest).
 **On the Windows PC**
 
 1. Unzip `PaneLink-windows.zip` anywhere.
-2. Double-click **`Install.cmd`** and allow administrator access. It installs the PaneLink
+2. Double-click **`Install.cmd`** (if Windows warns about a downloaded file, choose **Run**)
+   and allow administrator access. It installs the PaneLink
    service (starts with Windows) and opens the firewall for your local network only.
 
 **On the Mac**
 
 1. Unzip `PaneLink-mac.zip` and move **PaneLink.app** to Applications.
-2. The release build isn't notarized: the first time, right-click the app → **Open** → **Open**
-   (or run `xattr -dr com.apple.quarantine /Applications/PaneLink.app`).
-3. PaneLink lives in the menu bar. Allow **Local Network** access when macOS asks.
+2. Open it. The release build isn't notarized, so macOS blocks it the first time: open
+   **System Settings → Privacy & Security**, scroll down and click **Open Anyway**. (Or run
+   `xattr -dr com.apple.quarantine /Applications/PaneLink.app` once.)
+3. Allow **Local Network** access when macOS asks. The setup window opens by itself and walks
+   you through the rest; afterwards PaneLink lives in the menu bar.
 
 ## Pair
 
 1. Open PaneLink (menu bar → **Set up your Windows PC…**). Your PC shows up in the list
    automatically; click **Pair**. (Not listed? Type the PC's IP address instead.)
 2. A 6-digit code appears on the PC's monitors, even on the lock screen. Type it on the Mac.
-3. Done. Flip the switch to extend. The first time, macOS asks for **Screen Recording**
-   permission (needed to stream the virtual displays); grant it and turn the switch on again.
+3. Allow **Screen Recording** (the setup window has a button that opens the right page in
+   System Settings). It's needed to stream the virtual displays.
+4. Done. Flip the switch in the menu bar (or press ⌃⌥⌘E) to extend.
 
 Optional: **Accessibility** permission enables cursor alignment and putting windows back where
 they were.

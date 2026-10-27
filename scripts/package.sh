@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 VERSION=${VERSION:-dev}
 rm -rf dist && mkdir -p dist
 NO_INSTALL=1 VERSION="$VERSION" mac/bundle.sh
-ditto -c -k --keepParent mac/build/PaneLink.app dist/PaneLink-mac.zip
+ditto -c -k --norsrc --noextattr --keepParent mac/build/PaneLink.app dist/PaneLink-mac.zip
 windows/build.sh
 mkdir -p dist/PaneLink-windows
 cp windows/dist/* dist/PaneLink-windows/

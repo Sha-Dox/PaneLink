@@ -154,8 +154,13 @@ final class AppState: ObservableObject {
     @Published var pairing: Pairing = .none
     @Published var discovered: [Discovery.PC] = []
     @Published var scanning = false
-    /// Not set up yet, or the PC doesn't know this Mac: the setup card replaces the on/off switch.
-    var needsSetup: Bool { settings.hosts.isEmpty || pairing != .none }
+    @Published var screenAccess = CGPreflightScreenCaptureAccess()
+    /// Not set up yet, the PC doesn't know this Mac, or no Screen Recording permission: the setup card shows.
+    var needsSetup: Bool { settings.hosts.isEmpty || pairing != .none || !screenAccess }
+    var isFirstRun: Bool { settings.hosts.isEmpty }
+
+    /// While the setup card is up: notice the permission being granted in System Settings.
+    func refreshPermissions() { screenAccess = CGPreflightScreenCaptureAccess() }
     @Published var stats: [String: StreamStats] = [:]   // per monitor device
     @Published var settings: Settings {
         didSet {
@@ -286,6 +291,15 @@ final class AppState: ObservableObject {
             Log.write("paired with \(connectedHost ?? "?")")
             client.authenticate(token)
             connectionMessage = "Connected to \(connectedHost ?? "")"
+            if settings.wakeMAC.isEmpty || settings.pcName.isEmpty {   // paired by address: learn name + MAC for wake-up
+                let host = connectedHost
+                Task {
+                    if let pc = await Discovery.scan().first(where: { $0.host == host }) {
+                        if settings.wakeMAC.isEmpty { settings.wakeMAC = pc.mac }
+                        if settings.pcName.isEmpty { settings.pcName = pc.name }
+                    }
+                }
+            }
         case let .pairFailed(why):
             pairing = .failed(why == "wrong" ? "That code didn't match. Try again."
                               : why == "wait" ? "Wait a few seconds, then try again." : "The code expired. Show a new one.")
@@ -400,7 +414,8 @@ final class AppState: ObservableObject {
 
     func start() {
         guard !isOn else { return }
-        if needsSetup { phase = .error("Set up your Windows PC first (Open PaneLink…)"); return }
+        refreshPermissions()
+        if needsSetup { phase = .error("Finish setting up first (Open PaneLink…)"); return }
         stopNote = nil
         phase = .starting
         if !CGPreflightScreenCaptureAccess() {
