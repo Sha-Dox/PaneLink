@@ -220,7 +220,7 @@ final class AppState: ObservableObject {
         powerMonitor.onChange = { [weak self] st in
             Task { @MainActor in self?.power = st; self?.applyPowerPolicy() }
         }
-        if !CommandLine.arguments.contains(where: { ["--aligntest", "--windowtest", "--dummywindow", "--overlaytest", "--waketest", "--hotkeytest", "--stalltest", "--uishot", "--hidpitest", "--pipetest"].contains($0) }) { client.connect(hosts: settings.hosts, token: settings.token) }
+        if !CommandLine.arguments.contains(where: { ["--aligntest", "--windowtest", "--dummywindow", "--overlaytest", "--waketest", "--hotkeytest", "--stalltest", "--hidpitest", "--pipetest"].contains($0) }) { client.connect(hosts: settings.hosts, token: settings.token) }
         autostart = CommandLine.arguments.contains("--autostart")
         if settings.hosts.isEmpty { connectionMessage = "No Windows PC set up"; DispatchQueue.main.async { self.scan() } }
         if settings.hotkeys && !CommandLine.arguments.contains(where: { $0.hasSuffix("test") || $0 == "--dummywindow" }) {
@@ -247,7 +247,7 @@ final class AppState: ObservableObject {
 
     func reconnect() {
         connectionMessage = "Connecting…"
-        if !CommandLine.arguments.contains(where: { ["--aligntest", "--windowtest", "--dummywindow", "--overlaytest", "--waketest", "--hotkeytest", "--stalltest", "--uishot", "--hidpitest", "--pipetest"].contains($0) }) { client.connect(hosts: settings.hosts, token: settings.token) }
+        if !CommandLine.arguments.contains(where: { ["--aligntest", "--windowtest", "--dummywindow", "--overlaytest", "--waketest", "--hotkeytest", "--stalltest", "--hidpitest", "--pipetest"].contains($0) }) { client.connect(hosts: settings.hosts, token: settings.token) }
     }
 
     // MARK: control channel

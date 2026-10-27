@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <style>
+    .box { fill: #f6f8fa; stroke: #d0d7de; }
+    .title { font-size: 17px; font-weight: 600; fill: #1f2328; }
+    .step { font-size: 13px; fill: #424a53; }
+    .wire { font-size: 13px; fill: #0969da; font-weight: 600; }
+    .note { font-size: 12px; fill: #6e7781; }
+    .arrow { stroke: #0969da; stroke-width: 2.5; fill: none; }
+    .head { fill: #0969da; }
+    @media (prefers-color-scheme: dark) {
+      .box { fill: #161b22; stroke: #30363d; }
+      .title { fill: #e6edf3; }
+      .step { fill: #c9d1d9; }
+      .wire, .head { fill: #4493f8; }
+      .arrow { stroke: #4493f8; }
+      .note { fill: #8b949e; }
+    }
+  </style>
+
+  <rect class="box" x="10" y="20" width="330" height="240" rx="14"/>
+  <text class="title" x="34" y="56">Mac  (menu bar app)</text>
+  <text class="step" x="34" y="92">1  Virtual HiDPI displays (CGVirtualDisplay)</text>
+  <text class="step" x="34" y="122">2  Capture: ScreenCaptureKit, NV12</text>
+  <text class="step" x="34" y="152">3  Encode: VideoToolbox HEVC, low latency</text>
+  <text class="step" x="34" y="182">4  Packetise + XOR parity (FEC)</text>
+  <text class="note" x="34" y="232">cursor alignment · window memory · low power</text>
+
+  <path class="arrow" d="M352 115 H600"/>
+  <path class="head" d="M608 115 l-12 -7 v14 z"/>
+  <text class="wire" x="380" y="104">video  ·  UDP, one stream per monitor</text>
+
+  <path class="arrow" d="M600 175 H360"/>
+  <path class="head" d="M352 175 l12 -7 v14 z"/>
+  <text class="wire" x="384" y="200">heartbeats · stats · loss reports</text>
+
+  <text class="note" x="410" y="246">control: TCP 49500 (paired)</text>
+  <text class="note" x="410" y="264">discovery: UDP broadcast 49500</text>
+
+  <rect class="box" x="620" y="20" width="330" height="240" rx="14"/>
+  <text class="title" x="644" y="56">Windows PC  (service)</text>
+  <text class="step" x="644" y="92">5  Reassemble, repair lost packets</text>
+  <text class="step" x="644" y="122">6  Decode on the GPU (D3D11VA)</text>
+  <text class="step" x="644" y="152">7  Present full screen, tear-free</text>
+  <text class="step" x="644" y="182">8  Follows the lock screen desktop</text>
+  <text class="note" x="644" y="232">auto-off on use · Wake-on-LAN · quiet mode</text>
+</svg>

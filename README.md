@@ -1,6 +1,24 @@
-# PaneLink
+<p align="center">
+  <img src="docs/images/icon.png" width="128" alt="PaneLink icon">
+</p>
 
-Use the monitors on your Windows PC as extra, wireless displays for your Mac.
+<h1 align="center">PaneLink</h1>
+
+<p align="center">
+  Use the monitors on your Windows PC as extra, wireless displays for your Mac.
+</p>
+
+<p align="center">
+  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/Sha-Dox/PaneLink?include_prereleases&label=download" alt="Download"></a>
+  <a href="../../actions/workflows/build.yml"><img src="https://github.com/Sha-Dox/PaneLink/actions/workflows/build.yml/badge.svg" alt="Build"></a>
+  <img src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows" alt="Windows 10/11">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT"></a>
+</p>
+
+<p align="center">
+  <img src="docs/images/displays.png" width="640" alt="PaneLink main window with two Windows monitors">
+</p>
 
 PaneLink creates real virtual displays on the Mac, streams them over your LAN with very low
 latency (the same kind of pipeline as Sunshine/Moonlight, pointed the other way), and shows them
@@ -24,6 +42,12 @@ arrange them in System Settings, go full screen.
   while it only decodes video, and "Rest" to pause the PC's other apps.
 - Menu bar switch, global shortcuts (⌃⌥⌘E on/off, ⌃⌥⌘L low power, ⌃⌥⌘S stats overlay,
   ⌃⌥⌘A align), per-monitor colour controls, a stats overlay and a "Lost frames: why" report.
+
+## How it works
+
+<p align="center">
+  <img src="docs/images/how-it-works.svg" width="900" alt="Mac captures and encodes virtual displays, sends UDP video to the Windows service, which decodes on the GPU and shows it full screen">
+</p>
 
 ## Requirements
 
@@ -55,6 +79,17 @@ Download both zips from the [latest release](../../releases/latest).
 
 ## Pair
 
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/setup.png" alt="Setup window listing the PC found on the network"></td>
+    <td width="50%"><img src="docs/images/pair-code.svg" alt="The 6-digit pairing code shown on the PC's monitors"></td>
+  </tr>
+  <tr>
+    <td align="center">The Mac finds your PC by itself</td>
+    <td align="center">…and the PC shows a code to type in</td>
+  </tr>
+</table>
+
 1. Open PaneLink (menu bar → **Set up your Windows PC…**). Your PC shows up in the list
    automatically; click **Pair**. (Not listed? Type the PC's IP address instead.)
 2. A 6-digit code appears on the PC's monitors, even on the lock screen. Type it on the Mac.
@@ -67,6 +102,21 @@ they were.
 
 Pairing is per Mac. To forget a PC on the Mac: Windows PC tab → **Forget this PC…**. To make
 the PC forget every Mac: delete `C:\ProgramData\PaneLink\private\paired.txt`.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="33%"><img src="docs/images/menu.png" alt="Menu bar panel"></td>
+    <td width="33%"><img src="docs/images/performance.png" alt="Performance settings and lost-frame report"></td>
+    <td width="33%"><img src="docs/images/windows-pc.png" alt="Windows PC settings: auto-off, power, rest, wake"></td>
+  </tr>
+  <tr>
+    <td align="center">Menu bar</td>
+    <td align="center">Performance · "Lost frames: why"</td>
+    <td align="center">Windows PC: auto-off, power, Rest, wake</td>
+  </tr>
+</table>
 
 ## Optional extras
 

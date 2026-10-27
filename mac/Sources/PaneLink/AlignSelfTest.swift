@@ -190,13 +190,29 @@ enum AlignSelfTest {
     @MainActor static func uiShot() {
         let dir = ProcessInfo.processInfo.environment["SHOTDIR"] ?? "/tmp"
         NSApp.setActivationPolicy(.regular)
+        if let icon = ProcessInfo.processInfo.environment["ICON"], let img = NSImage(contentsOfFile: icon) { NSApp.applicationIconImage = img }
+        if ProcessInfo.processInfo.environment["CLEAN"] != nil { AppState.shared.settings.wakeFromOffReady = true }   // README shots: no banners
         let w = NSWindow(contentRect: NSRect(x: 80, y: 80, width: 760, height: 900), styleMask: [.titled], backing: .buffered, defer: false)
         w.contentView = NSHostingView(rootView: MainWindow(state: AppState.shared))
         w.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         let tabs = ["displays", "performance", "controls", "windows"]
+        func shootMenu() {
+            // the menu bar panel, in a plain window
+            let m = NSWindow(contentRect: NSRect(x: 900, y: 300, width: 340, height: 300), styleMask: [.borderless], backing: .buffered, defer: false)
+            let host = NSHostingView(rootView: MenuBarView(state: AppState.shared).background(.regularMaterial))
+            m.contentView = host
+            m.setContentSize(host.fittingSize)
+            m.orderFront(nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if let img = CGWindowListCreateImage(.null, .optionIncludingWindow, CGWindowID(m.windowNumber), [.boundsIgnoreFraming, .bestResolution]) {
+                    try? NSBitmapImageRep(cgImage: img).representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: "\(dir)/menu.png"))
+                }
+                exit(0)
+            }
+        }
         func shoot(_ i: Int) {
-            guard i < tabs.count else { exit(0) }
+            guard i < tabs.count else { shootMenu(); return }
             UserDefaults.standard.set(tabs[i], forKey: "mainTab")
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 if let img = CGWindowListCreateImage(.null, .optionIncludingWindow, CGWindowID(w.windowNumber), [.boundsIgnoreFraming, .bestResolution]) {
@@ -205,7 +221,7 @@ enum AlignSelfTest {
                 shoot(i + 1)
             }
         }
-        shoot(0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { shoot(0) }
     }
 
     /// `--hidpitest`: HiDPI virtual display gets a 2560x1440-point mode backed by 5120x2880, and SCK can capture it at native size.
